@@ -48,6 +48,9 @@ public class Robot extends IterativeRobot {
 	TeleopDrive teleopDrive;
 	Timer autonomousTimer;
 	
+	VisionServer vision;
+	VisionController autoVision;
+	
     public void robotInit() {
     	controller = new Joystick(1);
     	
@@ -73,8 +76,11 @@ public class Robot extends IterativeRobot {
     	autonomousTimer = new Timer();
     	autonomousTimer.start();
     	
-    	lights = new I2C(I2C.Port.kMXP,0); //TODO uncomment
+    	//lights = new I2C(I2C.Port.kMXP,0); //TODO uncomment
     	//lights.write(1, 0xf);
+    	
+    	vision = new VisionServer();
+    	autoVision = new VisionController(vision, drive, null);
     	
     	pref = Preferences.getInstance();
     	autonomousChooser = new SendableChooser();
@@ -117,12 +123,18 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void teleopPeriodic() {
+    	SmartDashboard.putString("target found", String.valueOf(vision.update()));
+    	SmartDashboard.putNumber("vision x", vision.getX());
+    	SmartDashboard.putNumber("vision y", vision.getY());
+    	SmartDashboard.putString("lined up to lift x", String.valueOf(autoVision.linedUpToLiftX()));
+    	SmartDashboard.putString("lined up to lift y", String.valueOf(autoVision.linedUpToLiftY()));
     	//SmartDashboard.putNumber("Range Finder", rangeFinder.finder.getVoltage());
     	//manualConveyor();
     	//autoConveyor();
     	incrementalConveyor();
     	teleopDrive.drive(controller);
         //teleopDrive();
+    	autoVision.update();
     }
     
     
