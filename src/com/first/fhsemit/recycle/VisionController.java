@@ -20,8 +20,8 @@ public class VisionController {
 	private final double yMax = 480;
 	
 	//center point of ideal lift
-	private final double xLift = 400;
-	private final double yLift = 600;
+	private final double xLift = 421;
+	private final double yLift = 137;
 	
 	//ideal angles for lifts
 	private final double angleA = 0;
@@ -52,20 +52,24 @@ public class VisionController {
 		this.gyro = gyro;
 	}
 	
-	public void startLiftTracking(){
-		autoState = 100;
+	public void startLiftTracking(boolean b){
+		if(b && autoState == 0)
+			autoState = 100;
 	}
 	
-	public void startBoilerTracking(){
-		autoState = 200;
+	public void startBoilerTracking(boolean b){
+		if(b && autoState == 0)
+			autoState = 200;
 	}
 	
-	public void startTest(){
-		autoState = 300;
+	public void startTest(boolean b){
+		if(b && autoState == 0)
+			autoState = 300;
 	}
 	
-	public void stopAll(){
-		autoState = 0;
+	public void stopAll(boolean b){
+		if(b)
+			autoState = 0;
 	}
 	
 	public int getAutoState(){
@@ -159,6 +163,7 @@ public class VisionController {
 				}
 			}
 			break;
+			
 			
 			case(300):
 				//start test sequence

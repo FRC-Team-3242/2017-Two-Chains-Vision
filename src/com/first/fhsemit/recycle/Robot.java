@@ -116,6 +116,7 @@ public class Robot extends IterativeRobot {
     	conveyorState = 0;
     	hooks.numberToMove = 0;
     	tilter.centeringState = 0;
+    	autoVision.stopAll(true);
     	hooks.brake(true);
     	loadPrefs();
     	hooks.expo = true;
@@ -128,11 +129,14 @@ public class Robot extends IterativeRobot {
     	SmartDashboard.putNumber("vision y", vision.getY());
     	SmartDashboard.putString("lined up to lift x", String.valueOf(autoVision.linedUpToLiftX()));
     	SmartDashboard.putString("lined up to lift y", String.valueOf(autoVision.linedUpToLiftY()));
+    	SmartDashboard.putNumber("autostate", autoVision.getAutoState());
     	//SmartDashboard.putNumber("Range Finder", rangeFinder.finder.getVoltage());
     	//manualConveyor();
     	//autoConveyor();
     	incrementalConveyor();
     	teleopDrive.drive(controller);
+    	autoVision.startTest(controller.getRawButton(1));//a
+    	autoVision.stopAll(controller.getRawButton(3));//x
         //teleopDrive();
     	autoVision.update();
     }

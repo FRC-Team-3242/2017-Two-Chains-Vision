@@ -85,8 +85,8 @@ public class Tilter {
 		SmartDashboard.putNumber("Tilter other average Value", otherAvg); 
 		switch(centeringState){
 		case 0:
-			if(controller.getRawButton(4)) centeringState = 1;
-			if(controller.getRawButton(1)) centeringState = 2;
+			//if(controller.getRawButton(4)) centeringState = 1;//y
+			//if(controller.getRawButton(1)) centeringState = 2;//a
 			if(controller.getRawAxis(3) > 0.2) forward();
 			else if(controller.getRawAxis(2) > 0.2) reverse();
 			else off();

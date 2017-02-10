@@ -22,9 +22,9 @@ public class VisionServer {
 	public VisionServer(){
 		table = NetworkTable.getTable("rpi");
 		found = false;
-		//15 values should be half a second
-		xHistory = new ArrayList<Double>(15);
-		yHistory = new ArrayList<Double>(15);
+		//5 values should be a little over a tenth of a second
+		xHistory = new ArrayList<Double>(5);
+		yHistory = new ArrayList<Double>(5);
 		timeoutTimer = new Timer();
 		timeoutTimer.start();
 		updateTimer = new Timer();
@@ -36,7 +36,7 @@ public class VisionServer {
 	 * @return if a target has been identified
 	 */
 	public boolean update(){
-		if(updateTimer.get() >= updateTime){
+		//if(updateTimer.get() >= updateTime){
 			found = table.getBoolean("found", false);
 	    	if(found){
 	    		if(timeoutTimer.get() > timeoutTime){
@@ -50,7 +50,7 @@ public class VisionServer {
 	    		}
 	    		xHistory.add(table.getNumber("visionX", -1));
 	    		yHistory.add(table.getNumber("visionY", -1));
-	    	}
+	    	//}
 			updateTimer.reset();
 		}
     	return found;
