@@ -136,7 +136,7 @@ public class Robot extends IterativeRobot {
     	incrementalConveyor();
     	teleopDrive.drive(controller);
     	autoVision.startTest(controller.getRawButton(1));//a
-    	autoVision.stopAll(controller.getRawButton(3));//x
+    	autoVision.stopAll(controller.getRawButton(4));//y
         //teleopDrive();
     	autoVision.update();
     }

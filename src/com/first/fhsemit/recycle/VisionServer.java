@@ -14,6 +14,7 @@ public class VisionServer {
 	private Timer updateTimer;
 	private final double updateTime = 0.0333333333;//30 times per second (camera framerate)
 	private final double timeoutTime = 2;
+	private final int buffer = 8;
 	
 	/**
 	 * retrieves coordinate data from raspberry pi over network tables
@@ -23,12 +24,16 @@ public class VisionServer {
 		table = NetworkTable.getTable("rpi");
 		found = false;
 		//5 values should be a little over a tenth of a second
-		xHistory = new ArrayList<Double>(5);
-		yHistory = new ArrayList<Double>(5);
+		xHistory = new ArrayList<Double>(buffer);
+		yHistory = new ArrayList<Double>(buffer);
 		timeoutTimer = new Timer();
 		timeoutTimer.start();
 		updateTimer = new Timer();
 		updateTimer.start();
+	}
+	
+	public boolean targetFound(){
+		return found;
 	}
 	
 	/**
@@ -44,7 +49,7 @@ public class VisionServer {
 	    			yHistory.clear();
 	    		}
 	    		timeoutTimer.reset();
-	    		if(xHistory.size() >= 15){
+	    		if(xHistory.size() >= buffer){
 		    		xHistory.remove(0);
 		    		yHistory.remove(0);
 	    		}

@@ -11,9 +11,9 @@ public class VisionController {
 	private PigeonImu gyro;
 	private RobotDrive drive;
 	
-	//both tolerances within 0.5%
+	//both tolerances within 1%
 	private final double xTolerance = 6.4;
-	private final double yTolerance = 3.6;
+	private final double yTolerance = 4.8;
 	private final double gyroTolerance = 1.8;
 	
 	private final double xMax = 640;
@@ -168,13 +168,16 @@ public class VisionController {
 			case(300):
 				//start test sequence
 				//turns toward target and adjusts distance at same time
+				if(!vision.targetFound()){
+					autoState = 302;
+				}
 				if(!linedUpToLift()){
 					double x = 0, y = 0;
 					if(!linedUpToLiftX()){
-						x = pLoop(vision.getX(),xLift,1,xMax);
+						x = pLoop(vision.getX(),xLift,-0.9,xMax);
 					}
 					if(!linedUpToLiftY()){
-						y = pLoop(vision.getY(),yLift,1,yMax);
+						y = pLoop(vision.getY(),yLift,-0.4,yMax);
 					}
 					drive.mecanumDrive_Cartesian(0, x,  y, 0);
 				}else{
@@ -197,6 +200,20 @@ public class VisionController {
 					}
 				}
 				break;
+			case(302):
+				//rotate until target is found
+				if(vision.targetFound()){
+					autoState = 300;
+					break;
+				}
+				if(vision.getY() > yMax/2){
+					//turn left if too far right
+					drive.mecanumDrive_Cartesian(0, 0, 0.25, 0);
+				}else{
+					//turn right if too far left
+					drive.mecanumDrive_Cartesian(0, 0, -0.25, 0);
+				}
+				break;
 		}
 	}
 	
@@ -211,7 +228,7 @@ public class VisionController {
 	private double pLoop(double sensor, double target, double maxSpeed, double maxSensor){
 		double error = target - sensor;
 		double normalizedError = error / maxSensor;
-		return normalizedError * maxSpeed;
+		return normalizedError * maxSpeed + 0.1;
 	}
 
 	/**
